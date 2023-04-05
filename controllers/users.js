@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { sendCookie } from "../utils/features.js";
 import ErrorHandler from "../middlewares/error.js";
 
-export const registerUser = async (req, res) => {
+export const registerUser = async (req, res, next) => {
     try {
         const { name, email, password } = req.body;
         let user = await User.findOne({ email });
@@ -17,7 +17,7 @@ export const registerUser = async (req, res) => {
     }
 };
 
-export const loginUser = async (req, res) => {
+export const loginUser = async (req, res, next) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email }).select('+password');
@@ -32,30 +32,22 @@ export const loginUser = async (req, res) => {
 };
 
 export const logoutUser = (req, res) => {
-    try {
-        res
-            .status(200)
-            .cookie('token', '', {
-                expires: new Date(Date.now()),
-                sameSite: (process.env.NODE_ENV === 'Development') ? 'lax' : 'none',
-                secure: (process.env.NODE_ENV === 'Development') ? false : true,
-            })
-            .json({
-                success: true,
-                user: req.user,
-            });
-    } catch (error) {
-        next(error);
-    }
-};
-
-export const userProfile = (req, res) => {
-    try {
-        res.status(200).json({
+    res
+        .status(200)
+        .cookie('token', '', {
+            expires: new Date(Date.now()),
+            sameSite: (process.env.NODE_ENV === 'Development') ? 'lax' : 'none',
+            secure: (process.env.NODE_ENV === 'Development') ? false : true,
+        })
+        .json({
             success: true,
             user: req.user,
         });
-    } catch (error) {
-        next(error);
-    }
+};
+
+export const userProfile = (req, res) => {
+    res.status(200).json({
+        success: true,
+        user: req.user,
+    });
 };
