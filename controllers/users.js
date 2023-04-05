@@ -25,7 +25,7 @@ export const loginUser = async (req, res, next) => {
 
         if (!user || !isMatch) return next(new ErrorHandler('Invalid Email or Password', 404));
 
-        sendCookie(user, res, `Welocme back, ${user.name}`);
+        sendCookie(user, res, `Welocme back, ${user.name}`, 201);
     } catch (error) {
         next(error);
     }
