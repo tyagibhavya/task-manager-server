@@ -7,7 +7,6 @@ const schema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: true,
     },
     isComplete: {
         type: Boolean,
